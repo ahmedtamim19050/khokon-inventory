@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -49,7 +50,7 @@ class ProductController extends Controller
 
         ]);
         if($request->has('image')){
-            $image=$request->image->store('products');
+            $image=$request->image->store('public/products');
         }else{
             $image=null;
         }
@@ -84,7 +85,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $units=Unit::all();
+        return view('products.edit',compact('product','units'));
     }
 
     /**
@@ -96,7 +98,34 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $request->validate([
+            'name'=>'required',
+            'sale_price'=>'required',
+            'buy_price'=>'required',
+            'qty'=>'required',
+            'unit'=>'required',
+
+        ]);
+        if($request->has('image')){
+            if(Storage::exists($request->image)){
+
+                Storage::delete($product->image);
+            }
+            $image=$request->image->store('products');
+
+        }else{
+            $image=$product->image;
+        }
+        $product->update([
+            'name'=>$request->name,
+            'sale_price'=>$request->sale_price,
+            'buy_price'=>$request->buy_price,
+            'qty'=>$request->qty,
+            'unit_id'=>$request->unit,
+            'image'=>$image,
+            'image'=>$image,
+        ]);
+        return redirect()->route('products.index')->with('success', 'Product Create successfully');
     }
 
     /**
@@ -107,6 +136,9 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        Storage::delete($product->image);
+        $product->delete();
+        return redirect()->route('products.index')->with('success', 'Product Delete successfully');
+
     }
 }

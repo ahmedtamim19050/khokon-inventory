@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Adminty - Premium Admin Template by Colorlib </title>
 
@@ -15,15 +16,23 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href="{{asset('files/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('files/bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
 
-    <link rel="stylesheet" type="text/css" href="{{asset('files/assets/icon/feather/css/feather.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('files/assets/icon/feather/css/feather.css') }}">
 
-    <link rel="stylesheet" type="text/css" href="{{asset('files/assets/css/style.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('files/assets/css/jquery.mCustomScrollbar.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('files/assets/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('files/assets/css/jquery.mCustomScrollbar.css') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
+    <link href="
+    https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.min.css
+    " rel="stylesheet">
+    <style>
+        .swal2-cancel {
+            margin-right: 10px !important;
+        }
+    </style>
     @yield('styles')
 </head>
 
@@ -163,7 +172,7 @@
                                 <div class="dropdown-primary dropdown">
                                     <div class="displayChatbox dropdown-toggle" data-toggle="dropdown">
                                         <i class="feather icon-message-square"></i>
-                                        <span class="badge bg-c-green">3</span>
+                                        <span class="badge bg-c-green">{{ Cart::getTotalQuantity() }}</span>
                                     </div>
                                 </div>
                             </li>
@@ -198,12 +207,13 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <form action="{{route('logout')}}" method="post">
+                                            <form action="{{ route('logout') }}" method="post">
                                                 @csrf
-                                            <button class="border-0 " type="submit" style="background-color: transparent">
-                                                <i class="feather icon-log-out"></i> Logout
-                                            </button>
-                                        </form>
+                                                <button class="border-0 " type="submit"
+                                                    style="background-color: transparent">
+                                                    <i class="feather icon-log-out"></i> Logout
+                                                </button>
+                                            </form>
                                         </li>
                                     </ul>
                                 </div>
@@ -218,7 +228,7 @@
                     <div class="card card_main p-fixed users-main">
                         <div class="user-box">
                             <div class="chat-inner-header">
-                                <div class="back_chatBox">
+                                {{-- <div class="back_chatBox">
                                     <div class="right-icon-control">
                                         <input type="text" class="form-control  search-text"
                                             placeholder="Search Friend" id="search-friends">
@@ -226,75 +236,44 @@
                                             <i class="icofont icofont-search"></i>
                                         </div>
                                     </div>
+                                </div> --}}
+                            </div>
+                            <div style="display: flex;flex-direction:column;justify-content:space-between;max-height:622px!important">
+                                <div class="main-friend-list" >
+                                    @foreach (Cart::getContent() as $product)
+                                        <div class="media userlist-box" data-id="1">
+                                                <a class="media-left" href="#!">
+                                                    <img class="media-object img-radius img-radius"
+                                                        src="{{ Storage::url($product->model->image) }}"
+                                                        alt="Generic placeholder image ">
+                                                    {{-- <div class="live-status bg-success"></div> --}}
+                                                </a>
+                                                <div class="media-body">
+                                                    <div class="f-13 chat-header">{{ $product->name }}</div>
+                                                    <p>{{ $product->model->sale_price }} x {{ $product->quantity }}
+                                                        ={{ $product->model->sale_price * $product->quantity }} tk</p>
+                                                </div>
+                                           
+                                        </div>
+                                    @endforeach
+                            
+                                </div>
+                                <div class="bg-primary" style="height: 110px">
+                                    <div class=" d-flex justify-content-around pt-2" >
+                                        <p class="" style="font-size: 20px">Total :</p>
+                                        <p class="" style="font-weight: 900;font-size: 20px">{{Cart::getSubTotal()}} tk</p>
+                                    </div>
+                                    <a href="{{route('checkout')}}" class="btn btn-success w-100 mt-1" style="background-color:#404E67;padding:14px 0;">Checkout</a>
                                 </div>
                             </div>
-                            <div class="main-friend-list">
-                                <div class="media userlist-box" data-id="1" data-status="online"
-                                    data-username="Josephin Doe" data-toggle="tooltip" data-placement="left"
-                                    title="Josephin Doe">
-                                    <a class="media-left" href="#!">
-                                        <img class="media-object img-radius img-radius"
-                                            src="files/assets/images/avatar-3.jpg" alt="Generic placeholder image ">
-                                        <div class="live-status bg-success"></div>
-                                    </a>
-                                    <div class="media-body">
-                                        <div class="f-13 chat-header">Josephin Doe</div>
-                                    </div>
-                                </div>
-                                <div class="media userlist-box" data-id="2" data-status="online"
-                                    data-username="Lary Doe" data-toggle="tooltip" data-placement="left"
-                                    title="Lary Doe">
-                                    <a class="media-left" href="#!">
-                                        <img class="media-object img-radius" src="files/assets/images/avatar-2.jpg"
-                                            alt="Generic placeholder image">
-                                        <div class="live-status bg-success"></div>
-                                    </a>
-                                    <div class="media-body">
-                                        <div class="f-13 chat-header">Lary Doe</div>
-                                    </div>
-                                </div>
-                                <div class="media userlist-box" data-id="3" data-status="online"
-                                    data-username="Alice" data-toggle="tooltip" data-placement="left"
-                                    title="Alice">
-                                    <a class="media-left" href="#!">
-                                        <img class="media-object img-radius" src="files/assets/images/avatar-4.jpg"
-                                            alt="Generic placeholder image">
-                                        <div class="live-status bg-success"></div>
-                                    </a>
-                                    <div class="media-body">
-                                        <div class="f-13 chat-header">Alice</div>
-                                    </div>
-                                </div>
-                                <div class="media userlist-box" data-id="4" data-status="online"
-                                    data-username="Alia" data-toggle="tooltip" data-placement="left" title="Alia">
-                                    <a class="media-left" href="#!">
-                                        <img class="media-object img-radius" src="files/assets/images/avatar-3.jpg"
-                                            alt="Generic placeholder image">
-                                        <div class="live-status bg-success"></div>
-                                    </a>
-                                    <div class="media-body">
-                                        <div class="f-13 chat-header">Alia</div>
-                                    </div>
-                                </div>
-                                <div class="media userlist-box" data-id="5" data-status="online"
-                                    data-username="Suzen" data-toggle="tooltip" data-placement="left"
-                                    title="Suzen">
-                                    <a class="media-left" href="#!">
-                                        <img class="media-object img-radius" src="files/assets/images/avatar-2.jpg"
-                                            alt="Generic placeholder image">
-                                        <div class="live-status bg-success"></div>
-                                    </a>
-                                    <div class="media-body">
-                                        <div class="f-13 chat-header">Suzen</div>
-                                    </div>
-                                </div>
-                            </div>
+                       
+                            
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="showChat_inner">
+            {{-- <div class="showChat_inner">
                 <div class="media chat-inner-header">
                     <a class="back_chatBox">
                         <i class="feather icon-chevron-left"></i> Josephin Doe
@@ -336,11 +315,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <div class="pcoded-main-container">
                 <div class="pcoded-wrapper">
-                     @include('layouts.sidebar')
+                    @include('layouts.sidebar')
                     <div class="pcoded-content">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
@@ -353,7 +332,7 @@
                                 </div>
                             </div>
                         </div>
-        
+
                     </div>
                 </div>
             </div>
@@ -405,29 +384,32 @@
 
 
     <script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-    <script type="text/javascript" src="{{asset('files/bower_components/jquery/dist/jquery.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('files/bower_components/jquery-ui/jquery-ui.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('files/bower_components/popper.js')}}/dist/umd/popper.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('files/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('files/bower_components/jquery/dist/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('files/bower_components/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('files/bower_components/popper.js') }}/dist/umd/popper.min.js')}}">
+    </script>
+    <script type="text/javascript" src="{{ asset('files/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
-    <script type="text/javascript" src="{{asset('files/bower_components/jquery-slimscroll/jquery.slimscroll.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('files/bower_components/jquery-slimscroll/jquery.slimscroll.js') }}">
+    </script>
 
-    <script type="text/javascript" src="{{asset('files/bower_components/modernizr/modernizr.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('files/bower_components/modernizr/modernizr.js') }}"></script>
 
-    <script type="text/javascript" src="{{asset('files/bower_components/chart.js')}}/dist/Chart.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('files/bower_components/chart.js') }}/dist/Chart.js')}}"></script>
 
-    <script src="{{asset('files/assets/pages/widget/amchart/amcharts.js')}}"></script>
-    <script src="{{asset('files/assets/pages/widget/amchart/serial.js')}}"></script>
-    <script src="{{asset('files/assets/pages/widget/amchart/light.js')}}"></script>
-    <script src="{{asset('files/assets/js/jquery.mCustomScrollbar.concat.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('files/assets/js/SmoothScroll.js')}}"></script>
-    <script src="{{asset('files/assets/js/pcoded.min.js')}}"></script>
+    <script src="{{ asset('files/assets/pages/widget/amchart/amcharts.js') }}"></script>
+    <script src="{{ asset('files/assets/pages/widget/amchart/serial.js') }}"></script>
+    <script src="{{ asset('files/assets/pages/widget/amchart/light.js') }}"></script>
+    <script src="{{ asset('files/assets/js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('files/assets/js/SmoothScroll.js') }}"></script>
+    <script src="{{ asset('files/assets/js/pcoded.min.js') }}"></script>
 
-    <script src="{{asset('files/assets/js/vartical-layout.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('files/assets/pages/dashboard/custom-dashboard.js')}}"></script>
-    <script type="text/javascript" src="{{asset('files/assets/js/script.min.js')}}"></script>
+    <script src="{{ asset('files/assets/js/vartical-layout.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('files/assets/pages/dashboard/custom-dashboard.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('files/assets/js/script.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-     <x-alert/>
+    @yield('script')
+    <x-alert />
 </body>
 
 <!-- Mirrored from demo.dashboardpack.com/adminty-html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 Sep 2023 09:02:41 GMT -->

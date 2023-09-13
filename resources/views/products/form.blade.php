@@ -12,12 +12,14 @@
             </span>
         @enderror
     </div>
-    
+
     
     <div class="col-md-6">
         @if($product->image)
-        <img src="{{Storage::url($product->image)}}" alt="" height="100">
+        <a class="text-primary" href="{{Storage::url($product->image)}}" target="_blank" style="text-decoration:underline;margin-right:10px">See image</a> 
         @endif
+
+
         <label for="sale_price" class="col-form-label ">Image (optional)</label>
         <input id="image" type="file" class="form-control @error('image') is-invalid @enderror"
             name="image" autocomplete="image">
@@ -77,7 +79,7 @@
             </option>
          @foreach ($units as $item)
              
-           <option value="{{$item->id}}" >{{$item->name}}</option>
+           <option value="{{$item->id}}" {{$product->unit ? $product->unit->name==$item->name ? 'selected' :'' :'' }}>{{$item->name}}</option>
          @endforeach
            
         </select>

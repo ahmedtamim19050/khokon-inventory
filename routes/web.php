@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,5 +25,10 @@ Auth::routes();
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+Route::post('/add-cart',[CartController::class,'add'])->name('cart.store');
+Route::post('/add-update',[CartController::class,'update'])->name('cart.update');
+Route::get('/cart-destroy/{id}', [CartController::class,'destroy'])->name('cart.destroy');
+Route::get('/checkout', [PageController::class,'checkout'])->name('checkout');
+
 Route::resource('products',ProductController::class);
 Route::resource('units',UnitController::class);
